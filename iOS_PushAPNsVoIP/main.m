@@ -2,8 +2,8 @@
 //  main.m
 //  iOS_PushAPNsVoIP
 //
-//  Created by Qway on 2017/9/29.
-//  Copyright © 2017年 viviwu. All rights reserved.
+//  Created by Qway on 2015/10/20.
+//  Copyright © 2015年 viviwu. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

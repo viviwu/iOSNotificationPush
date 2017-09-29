@@ -13,6 +13,7 @@
 		DEFF640F1F7E2FF300230AD3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DEFF640E1F7E2FF300230AD3 /* Assets.xcassets */; };
 		DEFF64121F7E2FF300230AD3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DEFF64101F7E2FF300230AD3 /* LaunchScreen.storyboard */; };
 		DEFF64151F7E2FF300230AD3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DEFF64141F7E2FF300230AD3 /* main.m */; };
+		DEFF64201F7E341100230AD3 /* AppDelegate+Push.m in Sources */ = {isa = PBXBuildFile; fileRef = DEFF641F1F7E341100230AD3 /* AppDelegate+Push.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,9 @@
 		DEFF64111F7E2FF300230AD3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DEFF64131F7E2FF300230AD3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DEFF64141F7E2FF300230AD3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		DEFF641E1F7E341100230AD3 /* AppDelegate+Push.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AppDelegate+Push.h"; sourceTree = "<group>"; };
+		DEFF641F1F7E341100230AD3 /* AppDelegate+Push.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "AppDelegate+Push.m"; sourceTree = "<group>"; };
+		DEFF64211F7E383400230AD3 /* iOS_PushAPNsVoIP.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iOS_PushAPNsVoIP.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,8 +62,11 @@
 		DEFF64041F7E2FF300230AD3 /* iOS_PushAPNsVoIP */ = {
 			isa = PBXGroup;
 			children = (
+				DEFF64211F7E383400230AD3 /* iOS_PushAPNsVoIP.entitlements */,
 				DEFF64051F7E2FF300230AD3 /* AppDelegate.h */,
 				DEFF64061F7E2FF300230AD3 /* AppDelegate.m */,
+				DEFF641E1F7E341100230AD3 /* AppDelegate+Push.h */,
+				DEFF641F1F7E341100230AD3 /* AppDelegate+Push.m */,
 				DEFF64081F7E2FF300230AD3 /* ViewController.h */,
 				DEFF64091F7E2FF300230AD3 /* ViewController.m */,
 				DEFF640B1F7E2FF300230AD3 /* Main.storyboard */,
@@ -103,6 +110,14 @@
 					DEFF64011F7E2FF300230AD3 = {
 						CreatedOnToolsVersion = 9.0;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -142,6 +157,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DEFF64201F7E341100230AD3 /* AppDelegate+Push.m in Sources */,
 				DEFF640A1F7E2FF300230AD3 /* ViewController.m in Sources */,
 				DEFF64151F7E2FF300230AD3 /* main.m in Sources */,
 				DEFF64071F7E2FF300230AD3 /* AppDelegate.m in Sources */,
@@ -278,11 +294,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				CODE_SIGN_ENTITLEMENTS = iOS_PushAPNsVoIP/iOS_PushAPNsVoIP.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = ALAK6VG32W;
 				INFOPLIST_FILE = iOS_PushAPNsVoIP/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.vivi.iOS-PushAPNsVoIP";
+				PRODUCT_BUNDLE_IDENTIFIER = com.qway.ideaMap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -292,11 +311,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				CODE_SIGN_ENTITLEMENTS = iOS_PushAPNsVoIP/iOS_PushAPNsVoIP.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = ALAK6VG32W;
 				INFOPLIST_FILE = iOS_PushAPNsVoIP/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.vivi.iOS-PushAPNsVoIP";
+				PRODUCT_BUNDLE_IDENTIFIER = com.qway.ideaMap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
