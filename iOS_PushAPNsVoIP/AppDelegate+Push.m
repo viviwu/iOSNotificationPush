@@ -59,54 +59,55 @@
 #endif
     //iOS10+ ：
     if(floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max) {
-      
-      [AppDelegate requestAuthorizationUserNotificationActions];
+        //[AppDelegate requestAuthorizationUserNotificationActions]; 
     }
-    
   }
 }
 
 #pragma mark--UNUserNotification
-+ (void)requestAuthorizationUserNotificationActions
++ (void)requestAuthorizationRegisterNotificationActions
+//+ (void)requestAuthorizationUserNotificationActions
 {
-  if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max) {
-    // Call category
-    UNNotificationAction *act_ans =
-    [UNNotificationAction actionWithIdentifier:@"Answer"
-                                         title:NSLocalizedString(@"Answer", nil)
-                                       options:UNNotificationActionOptionForeground];
-    UNNotificationAction *act_dec = [UNNotificationAction actionWithIdentifier:@"Decline"  title:NSLocalizedString(@"Decline", nil)  options:UNNotificationActionOptionNone];
-    
-    UNNotificationCategory *cat_call = [UNNotificationCategory categoryWithIdentifier:@"call_cat" actions:[NSArray arrayWithObjects:act_ans, act_dec, nil] intentIdentifiers:[[NSMutableArray alloc] init] options:UNNotificationCategoryOptionCustomDismissAction];
-    
-    // Msg category
-    UNTextInputNotificationAction *act_reply =
-    [UNTextInputNotificationAction actionWithIdentifier:@"Reply"
-                                                  title:NSLocalizedString(@"Reply", nil)
-                                                options:UNNotificationActionOptionNone];
-    UNNotificationAction *act_seen =
-    [UNNotificationAction actionWithIdentifier:@"Seen"
-                                         title:NSLocalizedString(@"Mark as seen", nil)
-                                       options:UNNotificationActionOptionNone];
-    UNNotificationCategory *cat_msg =
-    [UNNotificationCategory categoryWithIdentifier:@"msg_cat"
-                                           actions:[NSArray arrayWithObjects:act_reply, act_seen, nil]
-                                 intentIdentifiers:[[NSMutableArray alloc] init]
-                                           options:UNNotificationCategoryOptionCustomDismissAction];
-    
-    [UNUserNotificationCenter currentNotificationCenter].delegate = (id)([UIApplication sharedApplication].delegate);
-    
-    [[UNUserNotificationCenter currentNotificationCenter] requestAuthorizationWithOptions:(UNAuthorizationOptionAlert | UNAuthorizationOptionSound | UNAuthorizationOptionBadge)  completionHandler:^(BOOL granted, NSError *_Nullable error) {
-      // Enable or disable features based on authorization.
-      if (error) {
-        NSLog(@"%@", error.description);
-      }
-    }];
-    //needen't Msg category
-    NSSet* categories = [NSSet setWithObjects:cat_call, cat_msg, nil];
-    [[UNUserNotificationCenter currentNotificationCenter] setNotificationCategories:categories];
-  }
-  
+    if (@available(iOS 10.0, *)) {
+        // Call category
+        UNNotificationAction *act_ans =
+        [UNNotificationAction actionWithIdentifier:@"Answer"
+                                             title:NSLocalizedString(@"Answer", nil)
+                                           options:UNNotificationActionOptionForeground];
+        UNNotificationAction *act_dec = [UNNotificationAction actionWithIdentifier:@"Decline"  title:NSLocalizedString(@"Decline", nil)  options:UNNotificationActionOptionNone];
+        
+        UNNotificationCategory *cat_call = [UNNotificationCategory categoryWithIdentifier:@"call_cat" actions:[NSArray arrayWithObjects:act_ans, act_dec, nil] intentIdentifiers:[[NSMutableArray alloc] init] options:UNNotificationCategoryOptionCustomDismissAction];
+        
+        // Msg category
+        UNTextInputNotificationAction *act_reply =
+        [UNTextInputNotificationAction actionWithIdentifier:@"Reply"
+                                                      title:NSLocalizedString(@"Reply", nil)
+                                                    options:UNNotificationActionOptionNone];
+        UNNotificationAction *act_seen =
+        [UNNotificationAction actionWithIdentifier:@"Seen"
+                                             title:NSLocalizedString(@"Mark as seen", nil)
+                                           options:UNNotificationActionOptionNone];
+        UNNotificationCategory *cat_msg =
+        [UNNotificationCategory categoryWithIdentifier:@"msg_cat"
+                                               actions:[NSArray arrayWithObjects:act_reply, act_seen, nil]
+                                     intentIdentifiers:[[NSMutableArray alloc] init]
+                                               options:UNNotificationCategoryOptionCustomDismissAction];
+        
+        [UNUserNotificationCenter currentNotificationCenter].delegate = (id)([UIApplication sharedApplication].delegate);
+        
+        [[UNUserNotificationCenter currentNotificationCenter] requestAuthorizationWithOptions:(UNAuthorizationOptionAlert | UNAuthorizationOptionSound | UNAuthorizationOptionBadge)  completionHandler:^(BOOL granted, NSError *_Nullable error) {
+            // Enable or disable features based on authorization.
+            if (error) {
+                NSLog(@"%@", error.description);
+            }
+        }];
+        //needen't Msg category
+        NSSet* categories = [NSSet setWithObjects:cat_call, cat_msg, nil];
+        [[UNUserNotificationCenter currentNotificationCenter] setNotificationCategories:categories];
+    }else{
+        // Fallback on earlier versions iOS8~iOS10:
+        [AppDelegate registerUserNotificationAction];
+    }
 }
 
 
@@ -140,8 +141,12 @@
     reply_inline.activationMode = UIUserNotificationActivationModeBackground;
     reply_inline.destructive = NO;
     reply_inline.authenticationRequired = NO;
-    reply_inline.behavior = UIUserNotificationActionBehaviorTextInput;
-    actions = @[ reply_inline ];
+      if (@available(iOS 9.0, *)) {
+          reply_inline.behavior = UIUserNotificationActionBehaviorTextInput;
+          actions = @[ reply_inline ];
+      } else {
+          // Fallback on earlier versions
+      }
 #endif
   }
   
@@ -196,67 +201,74 @@
   NSLog(@"badge=%ld applicationIconBadgeNumber == %ld", badge, num);
   [[UIApplication sharedApplication] setApplicationIconBadgeNumber:num+badge];
   
-  if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max) {
-    
-    UNMutableNotificationContent* content = [[UNMutableNotificationContent alloc] init];
-    content.title = title;
-    content.body = body;
-    content.categoryIdentifier = @"msg_cat";
-    content.sound = [UNNotificationSound defaultSound];
-    if (sound && ![sound isEqualToString:@"default"]) {
-      content.sound = [UNNotificationSound soundNamed:sound];
+    if (@available(iOS 10.0, *)) {
+        UNMutableNotificationContent* content = [[UNMutableNotificationContent alloc] init];
+        content.title = title;
+        content.body = body;
+        content.categoryIdentifier = @"msg_cat";
+        content.sound = [UNNotificationSound defaultSound];
+        if (sound && ![sound isEqualToString:@"default"]) {
+            content.sound = [UNNotificationSound soundNamed:sound];
+        }
+        //        UNTimeIntervalNotificationTrigger * trigger = [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:5.0 repeats:NO];
+        UNNotificationRequest *req = [UNNotificationRequest requestWithIdentifier:@"call_request" content:content trigger:nil];
+        [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:req withCompletionHandler:^(NSError * _Nullable error) {
+            // Enable or disable features based on authorization.
+            if (error) {
+                NSLog(@"Error while adding notification request :");
+                NSLog(@"error.description==%@", error.description);
+            }
+        }];
+        //        [NSNotificationCenter.defaultCenter postNotificationName:title object:self userInfo:userInfo];
+        
+    } else {
+        
+        // Fallback on earlier versions
+        UILocalNotification *notification = [[UILocalNotification alloc] init];
+        notification.repeatInterval = 0;
+        notification.alertTitle = title; //iOS 8.2
+        notification.alertBody = body;
+        notification.soundName = UILocalNotificationDefaultSoundName;
+        if (sound && ![sound isEqualToString:@"default"]) {
+            notification.soundName = sound;
+        }//@"notification_ring.mp3";
+        [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
     }
-    //        UNTimeIntervalNotificationTrigger * trigger = [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:5.0 repeats:NO];
-    UNNotificationRequest *req = [UNNotificationRequest requestWithIdentifier:@"call_request" content:content trigger:nil];
-    [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:req withCompletionHandler:^(NSError * _Nullable error) {
-      // Enable or disable features based on authorization.
-      if (error) {
-        NSLog(@"Error while adding notification request :");
-        NSLog(@"error.description==%@", error.description);
-      }
-    }];
-    //        [NSNotificationCenter.defaultCenter postNotificationName:title object:self userInfo:userInfo];
-  } else {
-    UILocalNotification *notification = [[UILocalNotification alloc] init];
-    notification.repeatInterval = 0;
-    notification.alertTitle = title; //iOS 8.2
-    notification.alertBody = body;
-    notification.soundName = UILocalNotificationDefaultSoundName;
-    if (sound && ![sound isEqualToString:@"default"]) {
-      notification.soundName = sound;
-    }//@"notification_ring.mp3";
-    [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
-  }
+    
+  if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max) {  } else {  }
 }
 
 + (void)removePendingNotificationWith:(NSString *)uuid
 {
-  if(floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max) {
-    UNUserNotificationCenter *center= [UNUserNotificationCenter currentNotificationCenter];
-    [center getPendingNotificationRequestsWithCompletionHandler:^(NSArray<UNNotificationRequest *> *requests)
-     {
-       for (UNNotificationRequest * request in requests) {
-         NSLog(@"+++++request.identifier==%@", request.identifier);
-         if ([request.identifier isEqualToString:uuid])
+    if (@available(iOS 10.0, *)) {
+        UNUserNotificationCenter *center= [UNUserNotificationCenter currentNotificationCenter];
+        [center getPendingNotificationRequestsWithCompletionHandler:^(NSArray<UNNotificationRequest *> *requests)
          {
-           NSLog(@"removePendingNotification(UUID):\n %@",uuid);
-           [center removePendingNotificationRequestsWithIdentifiers:@[uuid]];
-         }
-       }
-     }];
-  }else{
-    UIApplication *application=[UIApplication sharedApplication];
-    NSArray *notifications = [application scheduledLocalNotifications];
-    for (UILocalNotification * localNoti in notifications)
-    {
-      NSLog(@"+++++localNoti.userInfo: %@", localNoti.userInfo);
-      if ([localNoti.userInfo[@"uuid"] isEqualToString: uuid])
-      {
-        NSLog(@"!!!cancelLocalNotification(UUID):\n %@", uuid);
-        [application cancelLocalNotification:localNoti];
-      }
+             for (UNNotificationRequest * request in requests) {
+                 NSLog(@"+++++request.identifier==%@", request.identifier);
+                 if ([request.identifier isEqualToString:uuid])
+                 {
+                     NSLog(@"removePendingNotification(UUID):\n %@",uuid);
+                     [center removePendingNotificationRequestsWithIdentifiers:@[uuid]];
+                 }
+             }
+         }];
+    } else {
+        // Fallback on earlier versions
+        UIApplication *application=[UIApplication sharedApplication];
+        NSArray *notifications = [application scheduledLocalNotifications];
+        for (UILocalNotification * localNoti in notifications)
+        {
+            NSLog(@"+++++localNoti.userInfo: %@", localNoti.userInfo);
+            if ([localNoti.userInfo[@"uuid"] isEqualToString: uuid])
+            {
+                NSLog(@"!!!cancelLocalNotification(UUID):\n %@", uuid);
+                [application cancelLocalNotification:localNoti];
+            }
+        }
     }
-  }
+    
+//  if(floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max) { }else{ }
   
 }
 

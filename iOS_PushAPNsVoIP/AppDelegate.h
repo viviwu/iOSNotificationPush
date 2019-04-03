@@ -14,6 +14,7 @@
 #define kUserDef [NSUserDefaults standardUserDefaults]
 #define kUserDef_OBJ(s) [[NSUserDefaults standardUserDefaults] objectForKey:s]
 
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate, UNUserNotificationCenterDelegate, PKPushRegistryDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
@@ -23,3 +24,5 @@
 
 @end
 
+
+#define log4Warn  NSLog

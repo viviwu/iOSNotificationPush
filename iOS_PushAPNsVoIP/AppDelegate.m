@@ -8,6 +8,7 @@
 
 #import "AppDelegate+Push.h"
 
+
 @interface AppDelegate ()
 
 @end
@@ -18,7 +19,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
   // Override point for customization after application launch.
   [self registerRemotePushService];//APNS & VoiP
-  [AppDelegate registerUserNotificationAction];
+//  [AppDelegate registerUserNotificationAction];
+    [AppDelegate requestAuthorizationRegisterNotificationActions];
   
   return YES;
 }
@@ -86,7 +88,8 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
   UIUserNotificationType theType = [UIApplication sharedApplication].currentUserNotificationSettings.types;
   if (UIUserNotificationTypeNone == theType)
   {
-    [AppDelegate registerUserNotificationAction];
+//    [AppDelegate registerUserNotificationAction];
+      [AppDelegate requestAuthorizationRegisterNotificationActions];
   }
   
   //    dispatch_async(dispatch_get_main_queue(), ^{   });
@@ -99,11 +102,15 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 #pragma mark - UNUserNotifications Framework
 
 - (void) userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler
-{
+API_AVAILABLE(ios(10.0)){
   NSLog(@"notification.request.identifier: %@",notification.request.identifier);
   // 这里真实需要处理交互的地方
   
-  completionHandler(UNNotificationPresentationOptionBadge | UNNotificationPresentationOptionAlert | UNNotificationPresentationOptionSound);
+    if (@available(iOS 10.0, *)) {
+        completionHandler(UNNotificationPresentationOptionBadge | UNNotificationPresentationOptionAlert | UNNotificationPresentationOptionSound);
+    } else {
+        // Fallback on earlier versions
+    }
 }
 
 #ifdef __IPHONE_11_0
@@ -116,7 +123,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 didReceiveNotificationResponse:(UNNotificationResponse *)response
          withCompletionHandler:(void (^)())completionHandler
 #endif
-{
+API_AVAILABLE(ios(10.0)){
   //通知来了 用户需要响应（点击／下来）才会触发这个回调！
   NSLog(@"UN : response recieved");
   NSLog(@"actionIdentifier-->: %@", response.actionIdentifier);
