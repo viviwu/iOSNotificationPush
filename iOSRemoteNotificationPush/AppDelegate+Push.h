@@ -14,9 +14,7 @@
 
 - (void)registerRemotePushService;
 
-//+(void)registerUserNotificationAction;
-//+ (void)requestAuthorizationUserNotificationActions;
-+ (void)requestAuthorizationRegisterNotificationActions;
++ (void)registerNotificationCategory;
 
 + (UIUserNotificationCategory *)getCallNotificationCategory;
 + (UIUserNotificationCategory *)getMessageNotificationCategory;

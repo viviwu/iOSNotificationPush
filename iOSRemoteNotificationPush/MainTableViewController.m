@@ -17,6 +17,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+  self.title = @"APNs &. VoIP Notifications Push";
+  
   self.tableView.tableFooterView = [UIView new];
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -29,6 +31,21 @@
 
 - (void)updatePushTokenToServerIfNeeded{
   [self.tableView reloadData];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+  [super viewDidAppear:animated];
+  [self fixApplicationIconBadgeNumber];
+}
+
+- (void)fixApplicationIconBadgeNumber
+{
+  if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
+  {
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber: 1];
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber: 0];
+  }
 }
 
 #pragma mark - Table view data source
@@ -62,11 +79,19 @@
 - (nullable NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath NS_AVAILABLE_IOS(8_0) __TVOS_PROHIBITED
 {
   //设置删除按钮
-  UITableViewRowAction *copyAction = [UITableViewRowAction rowActionWithStyle: UITableViewRowActionStyleDefault title:@"CopyToPasteBoard" handler: ^(UITableViewRowAction *action, NSIndexPath *indexPath) {
+  UITableViewRowAction *copyAction = [UITableViewRowAction rowActionWithStyle: UITableViewRowActionStyleDefault title:@"Copy" handler: ^(UITableViewRowAction *action, NSIndexPath *indexPath) {
+    UIPasteboard   * psb = [UIPasteboard generalPasteboard];
+    if(0==indexPath.section){
+      psb.string = kAppDel.apnsPushToken;
+    }else if(1==indexPath.section){
+      psb.string = kAppDel.voipPushToken;
+    }else{
+      
+    }
  
   }];
  
-  copyAction.backgroundColor = [UIColor blueColor];
+  copyAction.backgroundColor = [UIColor greenColor];
   copyAction.backgroundEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
   return  @[copyAction];
 }

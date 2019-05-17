@@ -20,13 +20,12 @@ NSString *kUpdatePushTokenToServerNotification = @"kUpdatePushTokenToServerNotif
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
   // Override point for customization after application launch.
   [self registerRemotePushService];//APNS & VoiP
-//  [AppDelegate registerUserNotificationAction];
-    [AppDelegate requestAuthorizationRegisterNotificationActions];
+  [AppDelegate registerNotificationCategory];
   
   return YES;
 }
 
-#pragma mark - PushNotification Functions
+#pragma mark ---- APNs PushNotification Functions
 
 - (void)application:(UIApplication *)application
 didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
@@ -49,17 +48,21 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
   NSLog(@"userInfo==%@", userInfo);
   //iOS10+ 启用UNNotificationAction后 应用在前台时收到APNs也会出发通知横幅！赞
   
-  //处理接受的推送消息
   if(userInfo)    completionHandler(UIBackgroundFetchResultNewData);
+  if(application.applicationState > 0 ){
+    //UIApplicationStateInactive  | UIApplicationStateBackground
+    [AppDelegate presentUserLocalNotification: userInfo]; //处理接受的推送消息
+  }else{
+    // UIApplicationStateActive
+  }
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
   NSLog(@"%@ : %@", NSStringFromSelector(_cmd), [error localizedDescription]);
 }
 
-
 //###################################################
-#pragma mark PKPushRegistryDelegate VoIP推送
+#pragma mark ---- PKPushRegistryDelegate VoIP推送
 
 - (void)pushRegistry:(PKPushRegistry *)registry didInvalidatePushTokenForType:(NSString *)type
 {
@@ -90,12 +93,12 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 
 - (void)pushRegistry:(PKPushRegistry *)registry didReceiveIncomingPushWithPayload:(PKPushPayload *)payload forType:(NSString *)type
 {
+  NSLog(@"PushKit received with payload : %@", payload.description);
   NSLog(@"PushKit received with payload : %@ ", payload.dictionaryPayload);
   UIUserNotificationType theType = [UIApplication sharedApplication].currentUserNotificationSettings.types;
   if (UIUserNotificationTypeNone == theType)
   {
-//    [AppDelegate registerUserNotificationAction];
-      [AppDelegate requestAuthorizationRegisterNotificationActions];
+
   }
   
   //    dispatch_async(dispatch_get_main_queue(), ^{   });

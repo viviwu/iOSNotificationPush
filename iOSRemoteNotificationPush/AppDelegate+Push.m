@@ -27,23 +27,60 @@
     //    PushKit
     PKPushRegistry *pushRegistry = [[PKPushRegistry alloc] initWithQueue:dispatch_get_main_queue()];
     pushRegistry.delegate = (id)self; //(id)([UIApplication sharedApplication].delegate);
-    // Initiate registration.
-    pushRegistry.desiredPushTypes=[NSSet setWithObject:PKPushTypeVoIP];
+    pushRegistry.desiredPushTypes=[NSSet setWithObject:PKPushTypeVoIP]; // Initiate registration.
     //    APNS push
     [[UIApplication sharedApplication] registerForRemoteNotifications];
+    if (@available(iOS 10.0, *)) {
+      [[UNUserNotificationCenter currentNotificationCenter] requestAuthorizationWithOptions:(UNAuthorizationOptionAlert | UNAuthorizationOptionSound | UNAuthorizationOptionBadge)  completionHandler:^(BOOL granted, NSError *_Nullable error) {
+        // Enable or disable features based on authorization.
+        if (error) {
+          NSLog(@"%@", error.description);
+        }
+      }];
+    } else {
+      // Fallback on earlier versions
+    }
+  }else{  //    APNS push
+    UIRemoteNotificationType type = UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound;
+    [[UIApplication sharedApplication]registerForRemoteNotificationTypes:type]; //iOS7-:
   }
 }
 
-#pragma mark--registerUserNotification
-+(void)registerUserNotificationAction
+
++ (void)registerNotificationCategory
 {
-  if (floor(NSFoundationVersionNumber) < NSFoundationVersionNumber_iOS_8_0){
-    //ios7及之前注册通知 上古方法：
-    UIRemoteNotificationType type = UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound;
-    [[UIApplication sharedApplication]registerForRemoteNotificationTypes:type];
+  if (@available(iOS 10.0, *)) {
+    // Call category
+    UNNotificationAction *act_ans =
+    [UNNotificationAction actionWithIdentifier:@"Answer"
+                                         title:NSLocalizedString(@"Answer", nil)
+                                       options:UNNotificationActionOptionForeground];
+    UNNotificationAction *act_dec = [UNNotificationAction actionWithIdentifier:@"Decline"  title:NSLocalizedString(@"Decline", nil)  options:UNNotificationActionOptionNone];
     
+    UNNotificationCategory *cat_call = [UNNotificationCategory categoryWithIdentifier:@"call_cat" actions:[NSArray arrayWithObjects:act_ans, act_dec, nil] intentIdentifiers:[[NSMutableArray alloc] init] options:UNNotificationCategoryOptionCustomDismissAction];
+    
+    // Msg category
+    UNTextInputNotificationAction *act_reply =
+    [UNTextInputNotificationAction actionWithIdentifier:@"Reply"
+                                                  title:NSLocalizedString(@"Reply", nil)
+                                                options:UNNotificationActionOptionNone];
+    UNNotificationAction *act_seen =
+    [UNNotificationAction actionWithIdentifier:@"Seen"
+                                         title:NSLocalizedString(@"Mark as seen", nil)
+                                       options:UNNotificationActionOptionNone];
+    UNNotificationCategory *cat_msg =
+    [UNNotificationCategory categoryWithIdentifier:@"msg_cat"
+                                           actions:[NSArray arrayWithObjects:act_reply, act_seen, nil]
+                                 intentIdentifiers:[[NSMutableArray alloc] init]
+                                           options:UNNotificationCategoryOptionCustomDismissAction];
+    
+    [UNUserNotificationCenter currentNotificationCenter].delegate = (id)([UIApplication sharedApplication].delegate);
+    
+    //needen't Msg category
+    NSSet* categories = [NSSet setWithObjects:cat_call, cat_msg, nil];
+    [[UNUserNotificationCenter currentNotificationCenter] setNotificationCategories:categories];
   }else{
-    
+    // Fallback on earlier versions iOS8~iOS10:
 #ifdef __IPHONE_8_0    //iOS8~iOS10
     //For Call:
     UIUserNotificationCategory *categoryRA=[AppDelegate getCallNotificationCategory];
@@ -57,59 +94,9 @@
     UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:type   categories:categorySet];
     [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
 #endif
-    //iOS10+ ：
-    if(floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max) {
-        //[AppDelegate requestAuthorizationUserNotificationActions]; 
-    }
+    //      if(floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max)
   }
 }
-
-#pragma mark--UNUserNotification
-+ (void)requestAuthorizationRegisterNotificationActions
-//+ (void)requestAuthorizationUserNotificationActions
-{
-    if (@available(iOS 10.0, *)) {
-        // Call category
-        UNNotificationAction *act_ans =
-        [UNNotificationAction actionWithIdentifier:@"Answer"
-                                             title:NSLocalizedString(@"Answer", nil)
-                                           options:UNNotificationActionOptionForeground];
-        UNNotificationAction *act_dec = [UNNotificationAction actionWithIdentifier:@"Decline"  title:NSLocalizedString(@"Decline", nil)  options:UNNotificationActionOptionNone];
-        
-        UNNotificationCategory *cat_call = [UNNotificationCategory categoryWithIdentifier:@"call_cat" actions:[NSArray arrayWithObjects:act_ans, act_dec, nil] intentIdentifiers:[[NSMutableArray alloc] init] options:UNNotificationCategoryOptionCustomDismissAction];
-        
-        // Msg category
-        UNTextInputNotificationAction *act_reply =
-        [UNTextInputNotificationAction actionWithIdentifier:@"Reply"
-                                                      title:NSLocalizedString(@"Reply", nil)
-                                                    options:UNNotificationActionOptionNone];
-        UNNotificationAction *act_seen =
-        [UNNotificationAction actionWithIdentifier:@"Seen"
-                                             title:NSLocalizedString(@"Mark as seen", nil)
-                                           options:UNNotificationActionOptionNone];
-        UNNotificationCategory *cat_msg =
-        [UNNotificationCategory categoryWithIdentifier:@"msg_cat"
-                                               actions:[NSArray arrayWithObjects:act_reply, act_seen, nil]
-                                     intentIdentifiers:[[NSMutableArray alloc] init]
-                                               options:UNNotificationCategoryOptionCustomDismissAction];
-        
-        [UNUserNotificationCenter currentNotificationCenter].delegate = (id)([UIApplication sharedApplication].delegate);
-        
-        [[UNUserNotificationCenter currentNotificationCenter] requestAuthorizationWithOptions:(UNAuthorizationOptionAlert | UNAuthorizationOptionSound | UNAuthorizationOptionBadge)  completionHandler:^(BOOL granted, NSError *_Nullable error) {
-            // Enable or disable features based on authorization.
-            if (error) {
-                NSLog(@"%@", error.description);
-            }
-        }];
-        //needen't Msg category
-        NSSet* categories = [NSSet setWithObjects:cat_call, cat_msg, nil];
-        [[UNUserNotificationCenter currentNotificationCenter] setNotificationCategories:categories];
-    }else{
-        // Fallback on earlier versions iOS8~iOS10:
-        [AppDelegate registerUserNotificationAction];
-    }
-}
-
 
 + (UIUserNotificationCategory *)getMessageNotificationCategory {
   NSArray *actions;
@@ -179,10 +166,23 @@
   UIMutableUserNotificationCategory *localRingNotifAction = [[UIMutableUserNotificationCategory alloc] init];
   localRingNotifAction.identifier = @"incoming_call";
   [localRingNotifAction setActions:localRingActions forContext:UIUserNotificationActionContextDefault];
-  [localRingNotifAction setActions:localRingActions forContext:UIUserNotificationActionContextMinimal];
+//  [localRingNotifAction setActions:localRingActions forContext:UIUserNotificationActionContextMinimal];
   
   return localRingNotifAction;
 }
+
+/*
+aps =     {
+  alert =         {
+    body = "Your message Here";
+    title = "The only thing ";
+  };
+  badge = 7;
+  "content-available" = 1;
+  sound = default;
+};
+*/
+#pragma mark -- presentUserLocalNotification
 
 + (void)presentUserLocalNotification:(NSDictionary *)userInfo{
   NSDictionary * aps = userInfo[@"aps"];
@@ -226,7 +226,11 @@
         // Fallback on earlier versions
         UILocalNotification *notification = [[UILocalNotification alloc] init];
         notification.repeatInterval = 0;
-        notification.alertTitle = title; //iOS 8.2
+      if (@available(iOS 8.2, *)) {
+        notification.alertTitle = title;
+      } else {
+        // Fallback on earlier versions
+      } //iOS 8.2
         notification.alertBody = body;
         notification.soundName = UILocalNotificationDefaultSoundName;
         if (sound && ![sound isEqualToString:@"default"]) {
