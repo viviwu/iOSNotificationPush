@@ -1,6 +1,6 @@
 //
 //  main.m
-//  iOS_PushAPNsVoIP
+//  iOS Remote Push of APNs &. VoIP  
 //
 //  Created by Qway on 2015/10/20.
 //  Copyright © 2015年 viviwu. All rights reserved.

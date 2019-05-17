@@ -1,6 +1,6 @@
 //
 //  AppDelegate.m
-//  iOS_PushAPNsVoIP
+//  iOS Remote Push of APNs &. VoIP  
 //
 //  Created by Qway on 2015/10/20.
 //  Copyright © 2015年 viviwu. All rights reserved.
@@ -8,6 +8,7 @@
 
 #import "AppDelegate+Push.h"
 
+NSString *kUpdatePushTokenToServerNotification = @"kUpdatePushTokenToServerNotification";
 
 @interface AppDelegate ()
 
@@ -39,6 +40,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     [ud synchronize];
   }
   self.apnsPushToken = token;
+  [[NSNotificationCenter defaultCenter] postNotificationName:kUpdatePushTokenToServerNotification object:token];
 }
 //  UIApplicationStateActive,
 //  UIApplicationStateInactive,
@@ -77,6 +79,10 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
       self.voipPushToken=token;
       [kUserDef setObject:token forKey:@"voipToken"];
       [kUserDef synchronize];
+      UIPasteboard   * psb = [UIPasteboard generalPasteboard];
+      psb.string = token;
+      
+      [[NSNotificationCenter defaultCenter] postNotificationName:kUpdatePushTokenToServerNotification object:token];
     }
     NSLog(@"VoIP Token:\n%@", token);
   }

@@ -1,6 +1,6 @@
 //
 //  AppDelegate.h
-//  iOS_PushAPNsVoIP
+//  iOS Remote Push of APNs &. VoIP  
 //
 //  Created by Qway on 2015/10/20.
 //  Copyright © 2015年 viviwu. All rights reserved.
@@ -14,6 +14,9 @@
 #define kUserDef [NSUserDefaults standardUserDefaults]
 #define kUserDef_OBJ(s) [[NSUserDefaults standardUserDefaults] objectForKey:s]
 
+#define kAppDel ((AppDelegate *)[UIApplication sharedApplication].delegate)
+
+extern NSString * kUpdatePushTokenToServerNotification;
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, UNUserNotificationCenterDelegate, PKPushRegistryDelegate>
 

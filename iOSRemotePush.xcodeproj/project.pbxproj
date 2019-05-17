@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0D2429F4228ED2490075C549 /* MainTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D2429F3228ED2490075C549 /* MainTableViewController.m */; };
 		DEFF64071F7E2FF300230AD3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DEFF64061F7E2FF300230AD3 /* AppDelegate.m */; };
-		DEFF640A1F7E2FF300230AD3 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DEFF64091F7E2FF300230AD3 /* ViewController.m */; };
 		DEFF640D1F7E2FF300230AD3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DEFF640B1F7E2FF300230AD3 /* Main.storyboard */; };
 		DEFF640F1F7E2FF300230AD3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DEFF640E1F7E2FF300230AD3 /* Assets.xcassets */; };
 		DEFF64121F7E2FF300230AD3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DEFF64101F7E2FF300230AD3 /* LaunchScreen.storyboard */; };
@@ -17,11 +17,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		DEFF64021F7E2FF300230AD3 /* iOS_PushAPNsVoIP.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOS_PushAPNsVoIP.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0D2429F2228ED2490075C549 /* MainTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainTableViewController.h; sourceTree = "<group>"; };
+		0D2429F3228ED2490075C549 /* MainTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainTableViewController.m; sourceTree = "<group>"; };
+		DEFF64021F7E2FF300230AD3 /* iOSRemotePush.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOSRemotePush.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEFF64051F7E2FF300230AD3 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		DEFF64061F7E2FF300230AD3 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		DEFF64081F7E2FF300230AD3 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		DEFF64091F7E2FF300230AD3 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		DEFF640C1F7E2FF300230AD3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		DEFF640E1F7E2FF300230AD3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DEFF64111F7E2FF300230AD3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -29,7 +29,7 @@
 		DEFF64141F7E2FF300230AD3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		DEFF641E1F7E341100230AD3 /* AppDelegate+Push.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AppDelegate+Push.h"; sourceTree = "<group>"; };
 		DEFF641F1F7E341100230AD3 /* AppDelegate+Push.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "AppDelegate+Push.m"; sourceTree = "<group>"; };
-		DEFF64211F7E383400230AD3 /* iOS_PushAPNsVoIP.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iOS_PushAPNsVoIP.entitlements; sourceTree = "<group>"; };
+		DEFF64211F7E383400230AD3 /* iOSRemotePush.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iOSRemotePush.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,7 +46,7 @@
 		DEFF63F91F7E2FF300230AD3 = {
 			isa = PBXGroup;
 			children = (
-				DEFF64041F7E2FF300230AD3 /* iOS_PushAPNsVoIP */,
+				DEFF64041F7E2FF300230AD3 /* iOSRemotePush */,
 				DEFF64031F7E2FF300230AD3 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -54,36 +54,36 @@
 		DEFF64031F7E2FF300230AD3 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				DEFF64021F7E2FF300230AD3 /* iOS_PushAPNsVoIP.app */,
+				DEFF64021F7E2FF300230AD3 /* iOSRemotePush.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		DEFF64041F7E2FF300230AD3 /* iOS_PushAPNsVoIP */ = {
+		DEFF64041F7E2FF300230AD3 /* iOSRemotePush */ = {
 			isa = PBXGroup;
 			children = (
-				DEFF64211F7E383400230AD3 /* iOS_PushAPNsVoIP.entitlements */,
+				DEFF64211F7E383400230AD3 /* iOSRemotePush.entitlements */,
 				DEFF64051F7E2FF300230AD3 /* AppDelegate.h */,
 				DEFF64061F7E2FF300230AD3 /* AppDelegate.m */,
 				DEFF641E1F7E341100230AD3 /* AppDelegate+Push.h */,
 				DEFF641F1F7E341100230AD3 /* AppDelegate+Push.m */,
-				DEFF64081F7E2FF300230AD3 /* ViewController.h */,
-				DEFF64091F7E2FF300230AD3 /* ViewController.m */,
+				0D2429F2228ED2490075C549 /* MainTableViewController.h */,
+				0D2429F3228ED2490075C549 /* MainTableViewController.m */,
 				DEFF640B1F7E2FF300230AD3 /* Main.storyboard */,
 				DEFF640E1F7E2FF300230AD3 /* Assets.xcassets */,
 				DEFF64101F7E2FF300230AD3 /* LaunchScreen.storyboard */,
 				DEFF64131F7E2FF300230AD3 /* Info.plist */,
 				DEFF64141F7E2FF300230AD3 /* main.m */,
 			);
-			path = iOS_PushAPNsVoIP;
+			path = iOSRemotePush;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		DEFF64011F7E2FF300230AD3 /* iOS_PushAPNsVoIP */ = {
+		DEFF64011F7E2FF300230AD3 /* iOSRemotePush */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = DEFF64181F7E2FF300230AD3 /* Build configuration list for PBXNativeTarget "iOS_PushAPNsVoIP" */;
+			buildConfigurationList = DEFF64181F7E2FF300230AD3 /* Build configuration list for PBXNativeTarget "iOSRemotePush" */;
 			buildPhases = (
 				DEFF63FE1F7E2FF300230AD3 /* Sources */,
 				DEFF63FF1F7E2FF300230AD3 /* Frameworks */,
@@ -93,9 +93,9 @@
 			);
 			dependencies = (
 			);
-			name = iOS_PushAPNsVoIP;
-			productName = iOS_PushAPNsVoIP;
-			productReference = DEFF64021F7E2FF300230AD3 /* iOS_PushAPNsVoIP.app */;
+			name = iOSRemotePush;
+			productName = iOSRemotePush;
+			productReference = DEFF64021F7E2FF300230AD3 /* iOSRemotePush.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -121,7 +121,7 @@
 					};
 				};
 			};
-			buildConfigurationList = DEFF63FD1F7E2FF300230AD3 /* Build configuration list for PBXProject "iOS_PushAPNsVoIP" */;
+			buildConfigurationList = DEFF63FD1F7E2FF300230AD3 /* Build configuration list for PBXProject "iOSRemotePush" */;
 			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -134,7 +134,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				DEFF64011F7E2FF300230AD3 /* iOS_PushAPNsVoIP */,
+				DEFF64011F7E2FF300230AD3 /* iOSRemotePush */,
 			);
 		};
 /* End PBXProject section */
@@ -158,8 +158,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				DEFF64201F7E341100230AD3 /* AppDelegate+Push.m in Sources */,
-				DEFF640A1F7E2FF300230AD3 /* ViewController.m in Sources */,
 				DEFF64151F7E2FF300230AD3 /* main.m in Sources */,
+				0D2429F4228ED2490075C549 /* MainTableViewController.m in Sources */,
 				DEFF64071F7E2FF300230AD3 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -295,11 +295,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
-				CODE_SIGN_ENTITLEMENTS = iOS_PushAPNsVoIP/iOS_PushAPNsVoIP.entitlements;
+				CODE_SIGN_ENTITLEMENTS = iOSRemotePush/iOSRemotePush.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = ALAK6VG32W;
-				INFOPLIST_FILE = iOS_PushAPNsVoIP/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				INFOPLIST_FILE = iOSRemotePush/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.qway.apnspush;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -312,11 +312,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
-				CODE_SIGN_ENTITLEMENTS = iOS_PushAPNsVoIP/iOS_PushAPNsVoIP.entitlements;
+				CODE_SIGN_ENTITLEMENTS = iOSRemotePush/iOSRemotePush.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = ALAK6VG32W;
-				INFOPLIST_FILE = iOS_PushAPNsVoIP/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				INFOPLIST_FILE = iOSRemotePush/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.qway.apnspush;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -327,7 +327,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		DEFF63FD1F7E2FF300230AD3 /* Build configuration list for PBXProject "iOS_PushAPNsVoIP" */ = {
+		DEFF63FD1F7E2FF300230AD3 /* Build configuration list for PBXProject "iOSRemotePush" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DEFF64161F7E2FF300230AD3 /* Debug */,
@@ -336,7 +336,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		DEFF64181F7E2FF300230AD3 /* Build configuration list for PBXNativeTarget "iOS_PushAPNsVoIP" */ = {
+		DEFF64181F7E2FF300230AD3 /* Build configuration list for PBXNativeTarget "iOSRemotePush" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DEFF64191F7E2FF300230AD3 /* Debug */,
