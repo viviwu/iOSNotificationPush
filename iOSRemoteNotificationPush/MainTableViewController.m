@@ -1,6 +1,6 @@
 //
 //  MainTableViewController.m
-//  iOS Remote Push of APNs &. VoIP 
+//  iOS Remote Notification Push of APNs &. VoIP 
 //
 //  Created by viviwu on 2015/5/17.
 //  Copyright © 2015 viviwu. All rights reserved.

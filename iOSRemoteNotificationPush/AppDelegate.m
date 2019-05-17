@@ -1,6 +1,6 @@
 //
 //  AppDelegate.m
-//  iOS Remote Push of APNs &. VoIP  
+//  iOS Remote Notification Push of APNs &. VoIP  
 //
 //  Created by Qway on 2015/10/20.
 //  Copyright © 2015年 viviwu. All rights reserved.

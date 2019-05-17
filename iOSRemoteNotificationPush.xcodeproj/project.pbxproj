@@ -19,7 +19,7 @@
 /* Begin PBXFileReference section */
 		0D2429F2228ED2490075C549 /* MainTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainTableViewController.h; sourceTree = "<group>"; };
 		0D2429F3228ED2490075C549 /* MainTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainTableViewController.m; sourceTree = "<group>"; };
-		DEFF64021F7E2FF300230AD3 /* iOSRemotePush.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOSRemotePush.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DEFF64021F7E2FF300230AD3 /* iOSRemoteNotificationPush.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOSRemoteNotificationPush.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEFF64051F7E2FF300230AD3 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		DEFF64061F7E2FF300230AD3 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		DEFF640C1F7E2FF300230AD3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -29,7 +29,7 @@
 		DEFF64141F7E2FF300230AD3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		DEFF641E1F7E341100230AD3 /* AppDelegate+Push.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AppDelegate+Push.h"; sourceTree = "<group>"; };
 		DEFF641F1F7E341100230AD3 /* AppDelegate+Push.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "AppDelegate+Push.m"; sourceTree = "<group>"; };
-		DEFF64211F7E383400230AD3 /* iOSRemotePush.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iOSRemotePush.entitlements; sourceTree = "<group>"; };
+		DEFF64211F7E383400230AD3 /* iOSRemoteNotificationPush.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iOSRemoteNotificationPush.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,7 +46,7 @@
 		DEFF63F91F7E2FF300230AD3 = {
 			isa = PBXGroup;
 			children = (
-				DEFF64041F7E2FF300230AD3 /* iOSRemotePush */,
+				DEFF64041F7E2FF300230AD3 /* iOSRemoteNotificationPush */,
 				DEFF64031F7E2FF300230AD3 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -54,15 +54,15 @@
 		DEFF64031F7E2FF300230AD3 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				DEFF64021F7E2FF300230AD3 /* iOSRemotePush.app */,
+				DEFF64021F7E2FF300230AD3 /* iOSRemoteNotificationPush.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		DEFF64041F7E2FF300230AD3 /* iOSRemotePush */ = {
+		DEFF64041F7E2FF300230AD3 /* iOSRemoteNotificationPush */ = {
 			isa = PBXGroup;
 			children = (
-				DEFF64211F7E383400230AD3 /* iOSRemotePush.entitlements */,
+				DEFF64211F7E383400230AD3 /* iOSRemoteNotificationPush.entitlements */,
 				DEFF64051F7E2FF300230AD3 /* AppDelegate.h */,
 				DEFF64061F7E2FF300230AD3 /* AppDelegate.m */,
 				DEFF641E1F7E341100230AD3 /* AppDelegate+Push.h */,
@@ -75,15 +75,15 @@
 				DEFF64131F7E2FF300230AD3 /* Info.plist */,
 				DEFF64141F7E2FF300230AD3 /* main.m */,
 			);
-			path = iOSRemotePush;
+			path = iOSRemoteNotificationPush;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		DEFF64011F7E2FF300230AD3 /* iOSRemotePush */ = {
+		DEFF64011F7E2FF300230AD3 /* iOSRemoteNotificationPush */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = DEFF64181F7E2FF300230AD3 /* Build configuration list for PBXNativeTarget "iOSRemotePush" */;
+			buildConfigurationList = DEFF64181F7E2FF300230AD3 /* Build configuration list for PBXNativeTarget "iOSRemoteNotificationPush" */;
 			buildPhases = (
 				DEFF63FE1F7E2FF300230AD3 /* Sources */,
 				DEFF63FF1F7E2FF300230AD3 /* Frameworks */,
@@ -93,9 +93,9 @@
 			);
 			dependencies = (
 			);
-			name = iOSRemotePush;
-			productName = iOSRemotePush;
-			productReference = DEFF64021F7E2FF300230AD3 /* iOSRemotePush.app */;
+			name = iOSRemoteNotificationPush;
+			productName = iOSRemoteNotificationPush;
+			productReference = DEFF64021F7E2FF300230AD3 /* iOSRemoteNotificationPush.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -121,7 +121,7 @@
 					};
 				};
 			};
-			buildConfigurationList = DEFF63FD1F7E2FF300230AD3 /* Build configuration list for PBXProject "iOSRemotePush" */;
+			buildConfigurationList = DEFF63FD1F7E2FF300230AD3 /* Build configuration list for PBXProject "iOSRemoteNotificationPush" */;
 			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -134,7 +134,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				DEFF64011F7E2FF300230AD3 /* iOSRemotePush */,
+				DEFF64011F7E2FF300230AD3 /* iOSRemoteNotificationPush */,
 			);
 		};
 /* End PBXProject section */
@@ -295,10 +295,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
-				CODE_SIGN_ENTITLEMENTS = iOSRemotePush/iOSRemotePush.entitlements;
+				CODE_SIGN_ENTITLEMENTS = iOSRemoteNotificationPush/iOSRemoteNotificationPush.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = ALAK6VG32W;
-				INFOPLIST_FILE = iOSRemotePush/Info.plist;
+				INFOPLIST_FILE = iOSRemoteNotificationPush/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.qway.apnspush;
@@ -312,10 +312,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
-				CODE_SIGN_ENTITLEMENTS = iOSRemotePush/iOSRemotePush.entitlements;
+				CODE_SIGN_ENTITLEMENTS = iOSRemoteNotificationPush/iOSRemoteNotificationPush.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = ALAK6VG32W;
-				INFOPLIST_FILE = iOSRemotePush/Info.plist;
+				INFOPLIST_FILE = iOSRemoteNotificationPush/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.qway.apnspush;
@@ -327,7 +327,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		DEFF63FD1F7E2FF300230AD3 /* Build configuration list for PBXProject "iOSRemotePush" */ = {
+		DEFF63FD1F7E2FF300230AD3 /* Build configuration list for PBXProject "iOSRemoteNotificationPush" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DEFF64161F7E2FF300230AD3 /* Debug */,
@@ -336,7 +336,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		DEFF64181F7E2FF300230AD3 /* Build configuration list for PBXNativeTarget "iOSRemotePush" */ = {
+		DEFF64181F7E2FF300230AD3 /* Build configuration list for PBXNativeTarget "iOSRemoteNotificationPush" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DEFF64191F7E2FF300230AD3 /* Debug */,
