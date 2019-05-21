@@ -14,11 +14,6 @@
 
 - (void)registerRemotePushService;
 
-+ (void)registerNotificationCategory;
-
-+ (UIUserNotificationCategory *)getCallNotificationCategory;
-+ (UIUserNotificationCategory *)getMessageNotificationCategory;
-
 + (void)presentUserLocalNotification:(NSDictionary *)userInfo;
 
 + (void)removePendingNotificationWith:(NSString *)uuid;

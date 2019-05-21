@@ -37,58 +37,45 @@
           NSLog(@"%@", error.description);
         }
       }];
+        
+        // Call category
+        UNNotificationAction *act_ans = [UNNotificationAction actionWithIdentifier:kAnswer  title:NSLocalizedString(kAnswer, nil)  options:UNNotificationActionOptionForeground];
+        UNNotificationAction *act_dec = [UNNotificationAction actionWithIdentifier:kDecline title:NSLocalizedString(kDecline, nil) options:UNNotificationActionOptionNone];
+        
+        UNNotificationCategory *cat_call = [UNNotificationCategory categoryWithIdentifier: kIncomingCall actions: @[act_ans, act_dec]   intentIdentifiers: @[kAnswer, kDecline]     options: UNNotificationCategoryOptionCustomDismissAction];
+        
+        // Msg category
+        UNTextInputNotificationAction *act_reply = [UNTextInputNotificationAction actionWithIdentifier: kReplay  title: NSLocalizedString(kReplay, nil)  options: UNNotificationActionOptionNone];
+        UNNotificationAction *act_seen = [UNNotificationAction actionWithIdentifier:kMark title:NSLocalizedString(kMark, nil) options:UNNotificationActionOptionNone];
+        
+        UNNotificationCategory *cat_msg = [UNNotificationCategory categoryWithIdentifier: kIncomingMsg  actions: @[act_reply, act_seen]  intentIdentifiers: @[kReplay, kMark]  options: UNNotificationCategoryOptionCustomDismissAction];
+        
+        [UNUserNotificationCenter currentNotificationCenter].delegate = (id)([UIApplication sharedApplication].delegate);
+        
+        //needen't Msg category
+        NSSet* categories = [NSSet setWithObjects:cat_call, cat_msg, nil];
+        [[UNUserNotificationCenter currentNotificationCenter] setNotificationCategories:categories];
+        
     } else {
-      // Fallback on earlier versions
+        // Fallback on earlier versions iOS8~iOS10:
+#ifdef __IPHONE_8_0    //iOS8~iOS10
+        //For Call:
+        UIUserNotificationCategory *categoryRA=[AppDelegate getUserNotificationCategoryCall];
+        //For Message:
+        UIUserNotificationCategory *categoryInput=[AppDelegate getUserNotificationCategoryMessage];
+        
+        NSMutableSet * categorySet=[NSMutableSet setWithObjects:categoryRA, categoryInput, nil];
+        
+        UIUserNotificationType type =  UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound;
+        
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:type   categories:categorySet];
+        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+#endif
+        //      if(floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max)
     }
-  }else{  //    APNS push
+  }else{  //    APNS push iOS7-:
     UIRemoteNotificationType type = UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound;
     [[UIApplication sharedApplication]registerForRemoteNotificationTypes:type]; //iOS7-:
-  }
-}
-
-
-+ (void)registerNotificationCategory
-{
-  if (@available(iOS 10.0, *)) {
-    // Call category
-    UNNotificationAction *act_ans = [UNNotificationAction actionWithIdentifier:kAnswer  title:NSLocalizedString(kAnswer, nil)  options:UNNotificationActionOptionForeground];
-    UNNotificationAction *act_dec = [UNNotificationAction actionWithIdentifier:kDecline title:NSLocalizedString(kDecline, nil) options:UNNotificationActionOptionNone];
-    
-    UNNotificationCategory *cat_call = [UNNotificationCategory categoryWithIdentifier: kIncomingCall
-                                                                              actions: @[act_ans, act_dec]
-                                                                    intentIdentifiers: @[kAnswer, kDecline]
-                                                                              options: UNNotificationCategoryOptionCustomDismissAction];
-    
-    // Msg category
-    UNTextInputNotificationAction *act_reply = [UNTextInputNotificationAction actionWithIdentifier: kReplay  title: NSLocalizedString(kReplay, nil)  options: UNNotificationActionOptionNone];
-    UNNotificationAction *act_seen = [UNNotificationAction actionWithIdentifier:kMark title:NSLocalizedString(kMark, nil) options:UNNotificationActionOptionNone];
-    
-    UNNotificationCategory *cat_msg = [UNNotificationCategory categoryWithIdentifier: kIncomingMsg
-                                                                             actions: @[act_reply, act_seen]
-                                                                   intentIdentifiers: @[kReplay, kMark]
-                                                                             options: UNNotificationCategoryOptionCustomDismissAction];
-    
-    [UNUserNotificationCenter currentNotificationCenter].delegate = (id)([UIApplication sharedApplication].delegate);
-    
-    //needen't Msg category
-    NSSet* categories = [NSSet setWithObjects:cat_call, cat_msg, nil];
-    [[UNUserNotificationCenter currentNotificationCenter] setNotificationCategories:categories];
-  }else{
-    // Fallback on earlier versions iOS8~iOS10:
-#ifdef __IPHONE_8_0    //iOS8~iOS10
-    //For Call:
-    UIUserNotificationCategory *categoryRA=[AppDelegate getUserNotificationCategoryCall];
-    //For Message:
-    UIUserNotificationCategory *categoryInput=[AppDelegate getUserNotificationCategoryMessage];
-    
-    NSMutableSet * categorySet=[NSMutableSet setWithObjects:categoryRA, categoryInput, nil];
-    
-    UIUserNotificationType type =  UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound;
-    
-    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:type   categories:categorySet];
-    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-#endif
-    //      if(floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max)
   }
 }
 
@@ -115,7 +102,7 @@
   
   UIMutableUserNotificationCategory *userNotifAction = [[UIMutableUserNotificationCategory alloc] init];
   userNotifAction.identifier = kIncomingMsg;
-  [userNotifAction setActions:@[ act_read, act_reply ] forContext:UIUserNotificationActionContextDefault];
+  [userNotifAction setActions:@[act_read, act_reply ] forContext: UIUserNotificationActionContextDefault];
   //UIUserNotificationActionContextMinimal
   return userNotifAction;
 }
