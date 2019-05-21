@@ -15,7 +15,6 @@
 - (void)registerRemotePushService;
 
 + (void)presentUserLocalNotification:(NSDictionary *)userInfo;
-
 + (void)removePendingNotificationWith:(NSString *)uuid;
 
 @end

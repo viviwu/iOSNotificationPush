@@ -28,16 +28,16 @@
     PKPushRegistry *pushRegistry = [[PKPushRegistry alloc] initWithQueue:dispatch_get_main_queue()];
     pushRegistry.delegate = (id)self; //(id)([UIApplication sharedApplication].delegate);
     pushRegistry.desiredPushTypes=[NSSet setWithObject:PKPushTypeVoIP]; // Initiate registration.
+      
     //    APNS push
     [[UIApplication sharedApplication] registerForRemoteNotifications];
     if (@available(iOS 10.0, *)) {
-      [[UNUserNotificationCenter currentNotificationCenter] requestAuthorizationWithOptions:(UNAuthorizationOptionAlert | UNAuthorizationOptionSound | UNAuthorizationOptionBadge)  completionHandler:^(BOOL granted, NSError *_Nullable error) {
+      [[UNUserNotificationCenter currentNotificationCenter] requestAuthorizationWithOptions: (UNAuthorizationOptionAlert | UNAuthorizationOptionSound | UNAuthorizationOptionBadge)  completionHandler:^(BOOL granted, NSError *_Nullable error) {
         // Enable or disable features based on authorization.
         if (error) {
           NSLog(@"%@", error.description);
         }
       }];
-        
         // Call category
         UNNotificationAction *act_ans = [UNNotificationAction actionWithIdentifier:kAnswer  title:NSLocalizedString(kAnswer, nil)  options:UNNotificationActionOptionForeground];
         UNNotificationAction *act_dec = [UNNotificationAction actionWithIdentifier:kDecline title:NSLocalizedString(kDecline, nil) options:UNNotificationActionOptionNone];
@@ -46,7 +46,7 @@
         
         // Msg category
         UNTextInputNotificationAction *act_reply = [UNTextInputNotificationAction actionWithIdentifier: kReplay  title: NSLocalizedString(kReplay, nil)  options: UNNotificationActionOptionNone];
-        UNNotificationAction *act_seen = [UNNotificationAction actionWithIdentifier:kMark title:NSLocalizedString(kMark, nil) options:UNNotificationActionOptionNone];
+        UNNotificationAction *act_seen = [UNNotificationAction actionWithIdentifier:kMark title:NSLocalizedString(kMark, nil) options: UNNotificationActionOptionNone];
         
         UNNotificationCategory *cat_msg = [UNNotificationCategory categoryWithIdentifier: kIncomingMsg  actions: @[act_reply, act_seen]  intentIdentifiers: @[kReplay, kMark]  options: UNNotificationCategoryOptionCustomDismissAction];
         
@@ -59,14 +59,13 @@
     } else {
         // Fallback on earlier versions iOS8~iOS10:
 #ifdef __IPHONE_8_0    //iOS8~iOS10
+        UIUserNotificationType type =  UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound;
         //For Call:
         UIUserNotificationCategory *categoryRA=[AppDelegate getUserNotificationCategoryCall];
         //For Message:
         UIUserNotificationCategory *categoryInput=[AppDelegate getUserNotificationCategoryMessage];
         
-        NSMutableSet * categorySet=[NSMutableSet setWithObjects:categoryRA, categoryInput, nil];
-        
-        UIUserNotificationType type =  UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound;
+        NSSet * categorySet=[NSSet setWithObjects:categoryRA, categoryInput, nil];
         
         UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:type   categories:categorySet];
         [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
@@ -102,7 +101,7 @@
   
   UIMutableUserNotificationCategory *userNotifAction = [[UIMutableUserNotificationCategory alloc] init];
   userNotifAction.identifier = kIncomingMsg;
-  [userNotifAction setActions:@[act_read, act_reply ] forContext: UIUserNotificationActionContextDefault];
+  [userNotifAction setActions:@[act_read, act_reply] forContext: UIUserNotificationActionContextDefault];
   //UIUserNotificationActionContextMinimal
   return userNotifAction;
 }
@@ -123,11 +122,11 @@
   decline.destructive = YES;
   decline.authenticationRequired = NO;
   
-  UIMutableUserNotificationCategory *localRingNotifAction = [[UIMutableUserNotificationCategory alloc] init];
-  localRingNotifAction.identifier = kIncomingCall;
-  [localRingNotifAction setActions:@[ decline, answer ] forContext:UIUserNotificationActionContextDefault];
+  UIMutableUserNotificationCategory *notiCat = [[UIMutableUserNotificationCategory alloc] init];
+  notiCat.identifier = kIncomingCall;
+  [notiCat setActions:@[decline, answer] forContext: UIUserNotificationActionContextDefault];
 //  UIUserNotificationActionContextMinimal
-  return localRingNotifAction;
+  return notiCat;
 }
 
 /*
