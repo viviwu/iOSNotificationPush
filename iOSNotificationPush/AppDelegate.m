@@ -11,8 +11,8 @@
 NSString *const kUpdatePushTokenToServerNotification = @"kUpdatePushTokenToServerNotification";
 
 NSString *const kIncomingMsg = @"incoming_msg";
-NSString *const kReplay = @"reply_inline";
-NSString *const kMark = @"mark_read"; //see
+NSString *const kReplay = @"reply_now";
+NSString *const kMark = @"ignore_or_mark_as_read"; //see
 
 NSString *const kIncomingCall = @"incoming_call";
 NSString *const kAnswer = @"Answer";
@@ -32,12 +32,52 @@ NSString *const kDecline = @"Decline";
   
   return YES;
 }
+//###################################################
+#pragma mark ---- PKPushRegistryDelegate VoIP PushKit
+
+- (void)pushRegistry:(PKPushRegistry *)registry didInvalidatePushTokenForType:(NSString *)type
+{
+    NSLog(@"PushKit Token invalidated");
+//    [self registerRemotePushService];
+}
+
+- (void)pushRegistry:(PKPushRegistry *)registry didUpdatePushCredentials:(PKPushCredentials *)credentials forType:(PKPushType)type
+{
+    NSLog(@"PushKit credentials updated !");
+    if([credentials.token length] == 0)
+    {
+        NSLog(@"voip token NULL");
+    }else{
+        //XWPrivte:
+        NSString *token =[AppDelegate tokenStringWithData:credentials.token];
+        if (token) {
+            self.voipPushToken=token;
+            [kUserDef setObject:token forKey:@"voipToken"];
+            [kUserDef synchronize];
+            UIPasteboard   * psb = [UIPasteboard generalPasteboard];
+            psb.string = token;
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:kUpdatePushTokenToServerNotification object:token];
+        }
+        NSLog(@"VoIP Token:\n%@", token);
+    }
+}
+
+- (void)pushRegistry:(PKPushRegistry *)registry didReceiveIncomingPushWithPayload:(PKPushPayload *)payload forType:(NSString *)type
+{
+    NSLog(@"PushKit received with payload : %@ \n forType:%@", payload.dictionaryPayload, type);
+    //    dispatch_async(dispatch_get_main_queue(), ^{   });
+    [AppDelegate presentUserLocalNotification: payload.dictionaryPayload];
+}
 
 #pragma mark ---- APNs PushNotification Functions
-
-- (void)application:(UIApplication *)application
-didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-//  NSLog(@"%@ : %@", NSStringFromSelector(_cmd), deviceToken);
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError: (NSError *)error
+{
+    NSLog(@"%@ : %@", NSStringFromSelector(_cmd), [error localizedDescription]);
+//    [self registerRemotePushService];
+}
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken: (NSData *)deviceToken
+{
   NSString *token = [AppDelegate tokenStringWithData:deviceToken];
   NSLog(@"APNS Token:\n %@", token);
   NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
@@ -49,71 +89,44 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
   self.apnsPushToken = token;
   [[NSNotificationCenter defaultCenter] postNotificationName:kUpdatePushTokenToServerNotification object:token];
 }
-//  UIApplicationStateActive,
-//  UIApplicationStateInactive,
-//  UIApplicationStateBackground
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler NS_AVAILABLE_IOS(7_0){
-  NSLog(@"userInfo==%@", userInfo);
-  //iOS10+ UNNotificationAction can alert foreground
-  
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification: (NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler NS_AVAILABLE_IOS(7_0)
+{
+    NSLog(@"APNS RemoteNotification:%@", userInfo);
   if(userInfo)    completionHandler(UIBackgroundFetchResultNewData);
   if(application.applicationState > 0 ){
     //UIApplicationStateInactive  | UIApplicationStateBackground
-    [AppDelegate presentUserLocalNotification: userInfo]; //处理接受的推送消息
+    //Process RemoteNotification
   }else{
     // UIApplicationStateActive
+       [AppDelegate presentUserLocalNotification: userInfo];
   }
 }
 
-- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
-  NSLog(@"%@ : %@", NSStringFromSelector(_cmd), [error localizedDescription]);
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+{
+    NSLog(@"%s \n %@", __func__, notification.userInfo);
 }
 
-//###################################################
-#pragma mark ---- PKPushRegistryDelegate VoIP PushKit
-
-- (void)pushRegistry:(PKPushRegistry *)registry didInvalidatePushTokenForType:(NSString *)type
+//########################iOS9~iOS10###########################
+//This method will be invoked even if the application was launched or resumed
+- (void)application:(UIApplication *)application handleActionWithIdentifier:(nullable NSString *)identifier forLocalNotification:(UILocalNotification *)notification withResponseInfo:(NSDictionary *)responseInfo completionHandler:(void(^)())completionHandler
 {
-  NSLog(@"PushKit Token invalidated");
-}
-
-- (void)pushRegistry:(PKPushRegistry *)registry didUpdatePushCredentials:(PKPushCredentials *)credentials forType:(PKPushType)type
-{
-  NSLog(@"PushKit credentials updated !");
-  if([credentials.token length] == 0)
-  {
-    NSLog(@"voip token NULL");
-  }else{
-    //XWPrivte:
-    NSString *token =[AppDelegate tokenStringWithData:credentials.token];
-    if (token) {
-      self.voipPushToken=token;
-      [kUserDef setObject:token forKey:@"voipToken"];
-      [kUserDef synchronize];
-      UIPasteboard   * psb = [UIPasteboard generalPasteboard];
-      psb.string = token;
-      
-      [[NSNotificationCenter defaultCenter] postNotificationName:kUpdatePushTokenToServerNotification object:token];
+    NSLog(@"responseInfo==%@", responseInfo);
+    if ([identifier isEqual:kMark]) {
+        
+    } else if ([identifier isEqual:kReplay]) {
+        
+    }else if ([identifier isEqual:kAnswer]) {
+        
+    } else if ([identifier isEqual:kDecline]) {
+        
+    }else{
+        
     }
-    NSLog(@"VoIP Token:\n%@", token);
-  }
+    completionHandler();
 }
-
-- (void)pushRegistry:(PKPushRegistry *)registry didReceiveIncomingPushWithPayload:(PKPushPayload *)payload forType:(NSString *)type
-{
-  NSLog(@"PushKit received with payload : %@", payload.description);
-  NSLog(@"PushKit received with payload : %@ ", payload.dictionaryPayload);
-  UIUserNotificationType theType = [UIApplication sharedApplication].currentUserNotificationSettings.types;
-  if (UIUserNotificationTypeNone == theType)
-  {
-
-  }
-  
-  //    dispatch_async(dispatch_get_main_queue(), ^{   });
-  [AppDelegate presentUserLocalNotification: payload.dictionaryPayload];
-}
-
-
+//########################iOS9~iOS10###########################
 
 //###################################################
 #pragma mark - UNUserNotifications Framework
@@ -121,8 +134,6 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 - (void) userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler
 API_AVAILABLE(ios(10.0)){
   NSLog(@"notification.request.identifier: %@",notification.request.identifier);
-  // 这里真实需要处理交互的地方
-  
     if (@available(iOS 10.0, *)) {
         completionHandler(UNNotificationPresentationOptionBadge | UNNotificationPresentationOptionAlert | UNNotificationPresentationOptionSound);
     } else {
@@ -130,57 +141,21 @@ API_AVAILABLE(ios(10.0)){
     }
 }
 
-#ifdef __IPHONE_11_0
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center
 didReceiveNotificationResponse:(UNNotificationResponse *)response
          withCompletionHandler:(void (^)(void))completionHandler
-//this block declaration is not a prototy
-#else
-- (void)userNotificationCenter:(UNUserNotificationCenter *)center
-didReceiveNotificationResponse:(UNNotificationResponse *)response
-         withCompletionHandler:(void (^)())completionHandler
-#endif
 API_AVAILABLE(ios(10.0)){
-  //通知来了 用户需要响应（点击／下来）才会触发这个回调！
-  NSLog(@"UN : response recieved");
-  NSLog(@"actionIdentifier-->: %@", response.actionIdentifier);
-  //msg_cat: call_cat
-  if ([response.actionIdentifier isEqual:@"Seen"]) {
-    log4Warn(@"%@", response.notification.request.content.userInfo);
-  } else if ([response.actionIdentifier isEqual:@"Reply"]) {
-    NSLog(@"userText==%@", ((UNTextInputNotificationResponse *)response).userText);
-  }else if ([response.actionIdentifier isEqual:@"Answer"]) {
-    log4Warn(@"%@", response.notification.request.content.userInfo);
-  } else if ([response.actionIdentifier isEqual:@"Decline"]) {
-    
-  }else{}
-  
+  //be called when user responded to the notification！
+  NSLog(@"response.actionIdentifier : %@", response.actionIdentifier);
+    //kReplay \kMark \kReplay \kReplay  ...
+    if ([response.actionIdentifier isEqual:kReplay])
+        NSLog(@"userText==%@", ((UNTextInputNotificationResponse *)response).userText);
+ 
   completionHandler();
 }
 
 //###################################################
-//NS_DEPRECATED_IOS(8_0, 10_0, "Use UserNotifications Framework's -[UNUserNotificationCenterDelegate。。。）
-#pragma mark - NSUser notifications
 
-#ifdef __IPHONE_9_0
-- (void)application:(UIApplication *)application
-handleActionWithIdentifier:(NSString *)identifier
-forLocalNotification:(UILocalNotification *)notification
-   withResponseInfo:(NSDictionary *)responseInfo
-  completionHandler:(void (^)())completionHandler {
-  NSLog(@"responseInfo==%@", responseInfo);
-  completionHandler();
-}
-
-#else
-- (void)application:(UIApplication *)application
-handleActionWithIdentifier:(NSString *)identifier
-forLocalNotification:(UILocalNotification *)notification
-  completionHandler:(void (^)())completionHandler {
-  NSLog(@"UILocalNotification==%@", notification);
-  completionHandler();
-}
-#endif
 
 
 - (void)applicationWillResignActive:(UIApplication *)application {
