@@ -14,6 +14,11 @@
 
 - (void)registerRemotePushService;
 
++ (void)presentNotification:(NSString*)title
+                       body:(NSString*)body
+         categoryIdentifier:(NSString*)categoryIdentifier
+                      sound:(NSString*)sound;
+
 + (void)presentUserLocalNotification:(NSDictionary *)userInfo;
 + (void)removePendingNotificationWith:(NSString *)uuid;
 

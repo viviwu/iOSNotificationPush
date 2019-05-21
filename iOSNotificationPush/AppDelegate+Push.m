@@ -142,6 +142,42 @@ aps =     {
 */
 #pragma mark -- presentUserLocalNotification
 
++ (void)presentNotification:(NSString*)title
+                       body:(NSString*)body
+         categoryIdentifier:(NSString*)categoryIdentifier
+                      sound:(NSString*)sound
+{
+    if (@available(iOS 10.0, *)) {
+        UNMutableNotificationContent* content = [[UNMutableNotificationContent alloc] init];
+        content.title = title;
+        content.body = body;
+        content.categoryIdentifier = categoryIdentifier;    // kIncomingMsg\kIncomingCall;
+        content.sound = [UNNotificationSound defaultSound];
+        if (sound && ![sound isEqualToString:@"default"]) {
+            content.sound = [UNNotificationSound soundNamed:sound];
+        }
+        UNTimeIntervalNotificationTrigger * trigger = [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:1.0 repeats:NO];
+        UNNotificationRequest *req = [UNNotificationRequest requestWithIdentifier:@"UNNotificationRequestID" content:content trigger:trigger];
+        [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:req withCompletionHandler:^(NSError * _Nullable error) {
+            // Enable or disable features based on authorization.
+            if (error)  NSLog(@"NotificationRequest:error.description==%@", error.description);
+        }];
+    } else {
+        // Fallback on earlier versions
+        UILocalNotification *notification = [[UILocalNotification alloc] init];
+        notification.repeatInterval = 0;
+        if (@available(iOS 8.2, *)) {
+            notification.alertTitle = title;    //iOS 8.2
+        } else {/* Fallback on earlier versions */ }
+        notification.alertBody = body;
+        notification.soundName = UILocalNotificationDefaultSoundName;
+        if (sound && ![sound isEqualToString:@"default"]) {
+            notification.soundName = sound; //@"notification_ring.mp3";
+        }
+        [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
+    }
+}
+
 + (void)presentUserLocalNotification:(NSDictionary *)userInfo{
   NSDictionary * aps = userInfo[@"aps"];
   NSDictionary * alert = nil;
@@ -152,52 +188,13 @@ aps =     {
     title = alert[@"title"];
     body = alert[@"body"];
   }
-  
   NSString * sound = aps[@"sound"];
+  [AppDelegate presentNotification:title body:body categoryIdentifier:kIncomingMsg sound:sound];
+    
   long badge = [userInfo[@"badge"] integerValue]?: 0;
   NSInteger num = [[UIApplication sharedApplication] applicationIconBadgeNumber];
-  NSLog(@"badge=%ld applicationIconBadgeNumber == %ld", badge, num);
   [[UIApplication sharedApplication] setApplicationIconBadgeNumber:num+badge];
-  
-    if (@available(iOS 10.0, *)) {
-        UNMutableNotificationContent* content = [[UNMutableNotificationContent alloc] init];
-        content.title = title;
-        content.body = body;
-        content.categoryIdentifier = kIncomingMsg;
-        content.sound = [UNNotificationSound defaultSound];
-        if (sound && ![sound isEqualToString:@"default"]) {
-            content.sound = [UNNotificationSound soundNamed:sound];
-        }
-        //        UNTimeIntervalNotificationTrigger * trigger = [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:5.0 repeats:NO];
-        UNNotificationRequest *req = [UNNotificationRequest requestWithIdentifier:@"call_request" content:content trigger:nil];
-        [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:req withCompletionHandler:^(NSError * _Nullable error) {
-            // Enable or disable features based on authorization.
-            if (error) {
-                NSLog(@"Error while adding notification request :");
-                NSLog(@"error.description==%@", error.description);
-            }
-        }];
-        //        [NSNotificationCenter.defaultCenter postNotificationName:title object:self userInfo:userInfo];
-        
-    } else {
-        
-        // Fallback on earlier versions
-        UILocalNotification *notification = [[UILocalNotification alloc] init];
-        notification.repeatInterval = 0;
-      if (@available(iOS 8.2, *)) {
-        notification.alertTitle = title;
-      } else {
-        // Fallback on earlier versions
-      } //iOS 8.2
-        notification.alertBody = body;
-        notification.soundName = UILocalNotificationDefaultSoundName;
-        if (sound && ![sound isEqualToString:@"default"]) {
-            notification.soundName = sound;
-        }//@"notification_ring.mp3";
-        [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
-    }
-    
-  if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max) {  } else {  }
+//  if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max) {  } else {  }
 }
 
 + (void)removePendingNotificationWith:(NSString *)uuid
@@ -231,7 +228,6 @@ aps =     {
     }
     
 //  if(floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max) { }else{ }
-  
 }
 
 #pragma mark -- instance method

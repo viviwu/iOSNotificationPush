@@ -48,6 +48,19 @@
   }
 }
 
+#pragma mark - Table View Delegate
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (1 == indexPath.section) {
+        if (0==indexPath.row) {
+            [AppDelegate presentNotification:@"☎️" body:@"100123456" categoryIdentifier:kIncomingCall sound:@"phone.wav"];
+        }else if(1==indexPath.row){
+            [AppDelegate presentNotification:@"✉️" body:@"I❤️U" categoryIdentifier:kIncomingMsg sound:@"notify.caf"];
+        }
+    }
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -57,38 +70,47 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 //#warning Incomplete implementation, return the number of rows
-    return 1;
+    return 2;
 }
 
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"reuseIdentifier" forIndexPath:indexPath];
-    
     // Configure the cell...
-  if(indexPath.section == 0){
-    cell.textLabel.text = kAppDel.apnsPushToken;
-  }if (indexPath.section == 1) {
-    cell.textLabel.text = kAppDel.voipPushToken;
-  } else {
-    
+  if(0==indexPath.section){
+      cell.accessoryType =UITableViewCellAccessoryNone;
+      if (0==indexPath.row) {
+          cell.textLabel.text = @"apnsPushToken";
+          cell.detailTextLabel.text = kAppDel.apnsPushToken;
+      }else if(1==indexPath.row){
+          cell.textLabel.text = @"voipPushToken";
+          cell.detailTextLabel.text = kAppDel.voipPushToken;
+      }
+  }if (1==indexPath.section) {
+      cell.accessoryType =UITableViewCellAccessoryDisclosureIndicator;
+      if(0==indexPath.row) {
+          cell.textLabel.text = @"Present kIncomingCall Notification";
+      }else if(1==indexPath.row){
+          cell.textLabel.text = @"Present kIncomingMsg Notification";
+      }
+  }else{
+      cell.accessoryType =UITableViewCellAccessoryNone;
   }
-    
     return cell;
 }
 
 - (nullable NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath NS_AVAILABLE_IOS(8_0) __TVOS_PROHIBITED
 {
-  //设置删除按钮
   UITableViewRowAction *copyAction = [UITableViewRowAction rowActionWithStyle: UITableViewRowActionStyleDefault title:@"Copy" handler: ^(UITableViewRowAction *action, NSIndexPath *indexPath) {
-    UIPasteboard   * psb = [UIPasteboard generalPasteboard];
+    UIPasteboard * psb = [UIPasteboard generalPasteboard];
     if(0==indexPath.section){
-      psb.string = kAppDel.apnsPushToken;
-    }else if(1==indexPath.section){
-      psb.string = kAppDel.voipPushToken;
-    }else{
-      
-    }
- 
+        if (0==indexPath.row) {
+            psb.string = kAppDel.apnsPushToken;
+        }else if(1==indexPath.row){
+            psb.string = kAppDel.voipPushToken;
+        }
+    }else{ }
   }];
  
   copyAction.backgroundColor = [UIColor greenColor];
@@ -99,10 +121,38 @@
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     // Return NO if you do not want the specified item to be editable.
-    return YES;
+    if (0 == indexPath.section) {
+        return YES;
+    }else
+        return NO;
 }
 
 
+- (NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    if (0 == section) {
+        return @"Slide left to copy to pasteboard";
+    }else if(1 == section){
+        return @"UserLocalNotification";
+    }else{
+        return @" ";
+    }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 60;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 30;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 20;
+}
 /*
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {

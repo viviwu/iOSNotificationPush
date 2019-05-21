@@ -54,7 +54,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 //  UIApplicationStateBackground
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler NS_AVAILABLE_IOS(7_0){
   NSLog(@"userInfo==%@", userInfo);
-  //iOS10+ 启用UNNotificationAction后 应用在前台时收到APNs也会出发通知横幅！赞
+  //iOS10+ UNNotificationAction can alert foreground
   
   if(userInfo)    completionHandler(UIBackgroundFetchResultNewData);
   if(application.applicationState > 0 ){
@@ -70,7 +70,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 }
 
 //###################################################
-#pragma mark ---- PKPushRegistryDelegate VoIP推送
+#pragma mark ---- PKPushRegistryDelegate VoIP PushKit
 
 - (void)pushRegistry:(PKPushRegistry *)registry didInvalidatePushTokenForType:(NSString *)type
 {

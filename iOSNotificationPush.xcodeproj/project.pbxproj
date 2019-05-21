@@ -8,10 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		0D2429F4228ED2490075C549 /* MainTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D2429F3228ED2490075C549 /* MainTableViewController.m */; };
+		0DDAA3172293D3A20063F88C /* notify.caf in Resources */ = {isa = PBXBuildFile; fileRef = 0DDAA3152293D3A20063F88C /* notify.caf */; };
+		0DDAA3182293D3A20063F88C /* phone.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0DDAA3162293D3A20063F88C /* phone.wav */; };
+		0DDAA31B2293D9570063F88C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0DDAA31A2293D9570063F88C /* LaunchScreen.storyboard */; };
 		DEFF64071F7E2FF300230AD3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DEFF64061F7E2FF300230AD3 /* AppDelegate.m */; };
 		DEFF640D1F7E2FF300230AD3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DEFF640B1F7E2FF300230AD3 /* Main.storyboard */; };
 		DEFF640F1F7E2FF300230AD3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DEFF640E1F7E2FF300230AD3 /* Assets.xcassets */; };
-		DEFF64121F7E2FF300230AD3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DEFF64101F7E2FF300230AD3 /* LaunchScreen.storyboard */; };
 		DEFF64151F7E2FF300230AD3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DEFF64141F7E2FF300230AD3 /* main.m */; };
 		DEFF64201F7E341100230AD3 /* AppDelegate+Push.m in Sources */ = {isa = PBXBuildFile; fileRef = DEFF641F1F7E341100230AD3 /* AppDelegate+Push.m */; };
 /* End PBXBuildFile section */
@@ -20,12 +22,14 @@
 		0D2429F2228ED2490075C549 /* MainTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainTableViewController.h; sourceTree = "<group>"; };
 		0D2429F3228ED2490075C549 /* MainTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainTableViewController.m; sourceTree = "<group>"; };
 		0DDAA3142293C3C20063F88C /* iOSNotificationPush.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iOSNotificationPush.entitlements; sourceTree = "<group>"; };
+		0DDAA3152293D3A20063F88C /* notify.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = notify.caf; sourceTree = "<group>"; };
+		0DDAA3162293D3A20063F88C /* phone.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = phone.wav; sourceTree = "<group>"; };
+		0DDAA31A2293D9570063F88C /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DEFF64021F7E2FF300230AD3 /* iOSNotificationPush.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOSNotificationPush.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEFF64051F7E2FF300230AD3 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		DEFF64061F7E2FF300230AD3 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		DEFF640C1F7E2FF300230AD3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		DEFF640E1F7E2FF300230AD3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		DEFF64111F7E2FF300230AD3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DEFF64131F7E2FF300230AD3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DEFF64141F7E2FF300230AD3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		DEFF641E1F7E341100230AD3 /* AppDelegate+Push.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AppDelegate+Push.h"; sourceTree = "<group>"; };
@@ -43,6 +47,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0DDAA3192293D3A80063F88C /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				0DDAA3152293D3A20063F88C /* notify.caf */,
+				0DDAA3162293D3A20063F88C /* phone.wav */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		DEFF63F91F7E2FF300230AD3 = {
 			isa = PBXGroup;
 			children = (
@@ -70,8 +83,9 @@
 				0D2429F2228ED2490075C549 /* MainTableViewController.h */,
 				0D2429F3228ED2490075C549 /* MainTableViewController.m */,
 				DEFF640B1F7E2FF300230AD3 /* Main.storyboard */,
+				0DDAA31A2293D9570063F88C /* LaunchScreen.storyboard */,
 				DEFF640E1F7E2FF300230AD3 /* Assets.xcassets */,
-				DEFF64101F7E2FF300230AD3 /* LaunchScreen.storyboard */,
+				0DDAA3192293D3A80063F88C /* Resources */,
 				DEFF64131F7E2FF300230AD3 /* Info.plist */,
 				DEFF64141F7E2FF300230AD3 /* main.m */,
 			);
@@ -144,9 +158,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DEFF64121F7E2FF300230AD3 /* LaunchScreen.storyboard in Resources */,
 				DEFF640F1F7E2FF300230AD3 /* Assets.xcassets in Resources */,
 				DEFF640D1F7E2FF300230AD3 /* Main.storyboard in Resources */,
+				0DDAA3182293D3A20063F88C /* phone.wav in Resources */,
+				0DDAA31B2293D9570063F88C /* LaunchScreen.storyboard in Resources */,
+				0DDAA3172293D3A20063F88C /* notify.caf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -173,14 +189,6 @@
 				DEFF640C1F7E2FF300230AD3 /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		DEFF64101F7E2FF300230AD3 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				DEFF64111F7E2FF300230AD3 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
