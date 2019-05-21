@@ -51,28 +51,22 @@
 {
   if (@available(iOS 10.0, *)) {
     // Call category
-    UNNotificationAction *act_ans =
-    [UNNotificationAction actionWithIdentifier:@"Answer"
-                                         title:NSLocalizedString(@"Answer", nil)
-                                       options:UNNotificationActionOptionForeground];
-    UNNotificationAction *act_dec = [UNNotificationAction actionWithIdentifier:@"Decline"  title:NSLocalizedString(@"Decline", nil)  options:UNNotificationActionOptionNone];
+    UNNotificationAction *act_ans = [UNNotificationAction actionWithIdentifier:kAnswer  title:NSLocalizedString(kAnswer, nil)  options:UNNotificationActionOptionForeground];
+    UNNotificationAction *act_dec = [UNNotificationAction actionWithIdentifier:kDecline title:NSLocalizedString(kDecline, nil) options:UNNotificationActionOptionNone];
     
-    UNNotificationCategory *cat_call = [UNNotificationCategory categoryWithIdentifier:@"call_cat" actions:[NSArray arrayWithObjects:act_ans, act_dec, nil] intentIdentifiers:[[NSMutableArray alloc] init] options:UNNotificationCategoryOptionCustomDismissAction];
+    UNNotificationCategory *cat_call = [UNNotificationCategory categoryWithIdentifier: kIncomingCall
+                                                                              actions: @[act_ans, act_dec]
+                                                                    intentIdentifiers: @[kAnswer, kDecline]
+                                                                              options: UNNotificationCategoryOptionCustomDismissAction];
     
     // Msg category
-    UNTextInputNotificationAction *act_reply =
-    [UNTextInputNotificationAction actionWithIdentifier:@"Reply"
-                                                  title:NSLocalizedString(@"Reply", nil)
-                                                options:UNNotificationActionOptionNone];
-    UNNotificationAction *act_seen =
-    [UNNotificationAction actionWithIdentifier:@"Seen"
-                                         title:NSLocalizedString(@"Mark as seen", nil)
-                                       options:UNNotificationActionOptionNone];
-    UNNotificationCategory *cat_msg =
-    [UNNotificationCategory categoryWithIdentifier:@"msg_cat"
-                                           actions:[NSArray arrayWithObjects:act_reply, act_seen, nil]
-                                 intentIdentifiers:[[NSMutableArray alloc] init]
-                                           options:UNNotificationCategoryOptionCustomDismissAction];
+    UNTextInputNotificationAction *act_reply = [UNTextInputNotificationAction actionWithIdentifier: kReplay  title: NSLocalizedString(kReplay, nil)  options: UNNotificationActionOptionNone];
+    UNNotificationAction *act_seen = [UNNotificationAction actionWithIdentifier:kMark title:NSLocalizedString(kMark, nil) options:UNNotificationActionOptionNone];
+    
+    UNNotificationCategory *cat_msg = [UNNotificationCategory categoryWithIdentifier: kIncomingMsg
+                                                                             actions: @[act_reply, act_seen]
+                                                                   intentIdentifiers: @[kReplay, kMark]
+                                                                             options: UNNotificationCategoryOptionCustomDismissAction];
     
     [UNUserNotificationCenter currentNotificationCenter].delegate = (id)([UIApplication sharedApplication].delegate);
     
@@ -83,9 +77,9 @@
     // Fallback on earlier versions iOS8~iOS10:
 #ifdef __IPHONE_8_0    //iOS8~iOS10
     //For Call:
-    UIUserNotificationCategory *categoryRA=[AppDelegate getCallNotificationCategory];
+    UIUserNotificationCategory *categoryRA=[AppDelegate getUserNotificationCategoryCall];
     //For Message:
-    UIUserNotificationCategory *categoryInput=[AppDelegate getMessageNotificationCategory];
+    UIUserNotificationCategory *categoryInput=[AppDelegate getUserNotificationCategoryMessage];
     
     NSMutableSet * categorySet=[NSMutableSet setWithObjects:categoryRA, categoryInput, nil];
     
@@ -98,76 +92,54 @@
   }
 }
 
-+ (UIUserNotificationCategory *)getMessageNotificationCategory {
-  NSArray *actions;
++ (UIUserNotificationCategory *)getUserNotificationCategoryMessage {
+  //if ([[UIDevice.currentDevice systemVersion] floatValue] < 9 )
+  UIMutableUserNotificationAction *act_read = [[UIMutableUserNotificationAction alloc] init];
+  act_read.identifier = kMark;
+  act_read.title = NSLocalizedString(kMark, nil);
+  act_read.activationMode = UIUserNotificationActivationModeBackground;
+  act_read.destructive = NO;
+  act_read.authenticationRequired = NO;
   
-  if ([[UIDevice.currentDevice systemVersion] floatValue] < 9 ) {
-    
-    UIMutableUserNotificationAction *reply = [[UIMutableUserNotificationAction alloc] init];
-    reply.identifier = @"reply";
-    reply.title = NSLocalizedString(@"Reply", nil);
-    reply.activationMode = UIUserNotificationActivationModeForeground;
-    reply.destructive = NO;
-    reply.authenticationRequired = YES;
-    
-    UIMutableUserNotificationAction *mark_read = [[UIMutableUserNotificationAction alloc] init];
-    mark_read.identifier = @"mark_read";
-    mark_read.title = NSLocalizedString(@"Mark Read", nil);
-    mark_read.activationMode = UIUserNotificationActivationModeBackground;
-    mark_read.destructive = NO;
-    mark_read.authenticationRequired = NO;
-    
-    actions = @[ mark_read, reply ];
+  UIMutableUserNotificationAction *act_reply = [[UIMutableUserNotificationAction alloc] init];
+  act_reply.identifier = kReplay;
+  act_reply.title = NSLocalizedString(kReplay, nil);
+  act_reply.activationMode = UIUserNotificationActivationModeBackground;
+  act_reply.destructive = NO;
+  act_reply.authenticationRequired = NO;
+  if (@available(iOS 9.0, *)) {
+    act_reply.behavior = UIUserNotificationActionBehaviorTextInput;
   } else {
-    // iOS 9 allows for inline reply. We don't propose mark_read in this case
-#ifdef __IPHONE_9_0
-    UIMutableUserNotificationAction *reply_inline = [[UIMutableUserNotificationAction alloc] init];
-    
-    reply_inline.identifier = @"reply_inline";
-    reply_inline.title = NSLocalizedString(@"Reply", nil);
-    reply_inline.activationMode = UIUserNotificationActivationModeBackground;
-    reply_inline.destructive = NO;
-    reply_inline.authenticationRequired = NO;
-      if (@available(iOS 9.0, *)) {
-          reply_inline.behavior = UIUserNotificationActionBehaviorTextInput;
-          actions = @[ reply_inline ];
-      } else {
-          // Fallback on earlier versions
-      }
-#endif
+    // iOS 9 allows for inline reply. We don't propose act_read in this case
   }
   
-  UIMutableUserNotificationCategory *localRingNotifAction = [[UIMutableUserNotificationCategory alloc] init];
-  localRingNotifAction.identifier = @"incoming_msg";
-  [localRingNotifAction setActions:actions forContext:UIUserNotificationActionContextDefault];
-  [localRingNotifAction setActions:actions forContext:UIUserNotificationActionContextMinimal];
-  
-  return localRingNotifAction;
+  UIMutableUserNotificationCategory *userNotifAction = [[UIMutableUserNotificationCategory alloc] init];
+  userNotifAction.identifier = kIncomingMsg;
+  [userNotifAction setActions:@[ act_read, act_reply ] forContext:UIUserNotificationActionContextDefault];
+  //UIUserNotificationActionContextMinimal
+  return userNotifAction;
 }
 
-+ (UIUserNotificationCategory *)getCallNotificationCategory {
-  //        ①、注册接受行为
++ (UIUserNotificationCategory *)getUserNotificationCategoryCall
+{
   UIMutableUserNotificationAction *answer = [[UIMutableUserNotificationAction alloc] init];
-  answer.identifier = @"answer";
-  answer.title = NSLocalizedString(@"Answer", nil);
+  answer.identifier = kAnswer;
+  answer.title = NSLocalizedString(kAnswer, nil);
   answer.activationMode = UIUserNotificationActivationModeForeground;//当点击的时候启动程序
   answer.destructive = NO;
-  answer.authenticationRequired = NO;//YES;//需要解锁才能处理
-  //        ②、注册拒绝行为
+  answer.authenticationRequired = NO;//YES 需要解锁才能处理
+  
   UIMutableUserNotificationAction *decline = [[UIMutableUserNotificationAction alloc] init];
-  decline.identifier = @"decline";
-  decline.title = NSLocalizedString(@"Decline", nil);
+  decline.identifier = kDecline;
+  decline.title = NSLocalizedString(kDecline, nil);
   decline.activationMode = UIUserNotificationActivationModeBackground;
   decline.destructive = YES;
   decline.authenticationRequired = NO;
   
-  NSArray *localRingActions = @[ decline, answer ];
-  //        ③、创建一个可变通知策略  动作类别集合
   UIMutableUserNotificationCategory *localRingNotifAction = [[UIMutableUserNotificationCategory alloc] init];
-  localRingNotifAction.identifier = @"incoming_call";
-  [localRingNotifAction setActions:localRingActions forContext:UIUserNotificationActionContextDefault];
-//  [localRingNotifAction setActions:localRingActions forContext:UIUserNotificationActionContextMinimal];
-  
+  localRingNotifAction.identifier = kIncomingCall;
+  [localRingNotifAction setActions:@[ decline, answer ] forContext:UIUserNotificationActionContextDefault];
+//  UIUserNotificationActionContextMinimal
   return localRingNotifAction;
 }
 
@@ -205,7 +177,7 @@ aps =     {
         UNMutableNotificationContent* content = [[UNMutableNotificationContent alloc] init];
         content.title = title;
         content.body = body;
-        content.categoryIdentifier = @"msg_cat";
+        content.categoryIdentifier = kIncomingMsg;
         content.sound = [UNNotificationSound defaultSound];
         if (sound && ![sound isEqualToString:@"default"]) {
             content.sound = [UNNotificationSound soundNamed:sound];
@@ -274,6 +246,28 @@ aps =     {
     
 //  if(floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max) { }else{ }
   
+}
+
+#pragma mark -- instance method
++ (UIUserNotificationAction *)userNotificationActionWithId:(NSString*)identifier
+                                                     title:(NSString*)title
+                                            activationMode:(UIUserNotificationActivationMode)activationMode
+                                               destructive:(BOOL)destructive
+                                    authenticationRequired:(BOOL)authenticationRequired
+                                                  behavior:(NSUInteger)behavior //API_AVAILABLE(ios(9.0))
+{
+  UIMutableUserNotificationAction *action = [[UIMutableUserNotificationAction alloc] init];
+  action.identifier = identifier ;
+  action.title = title;
+  action.activationMode = activationMode;
+  action.destructive = destructive;
+  action.authenticationRequired = authenticationRequired;
+  if (@available(iOS 9.0, *)) {
+    action.behavior = behavior;
+  } else {
+    // Fallback on earlier versions
+  }
+  return action;
 }
 
 @end

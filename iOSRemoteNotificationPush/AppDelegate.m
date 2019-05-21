@@ -8,7 +8,15 @@
 
 #import "AppDelegate+Push.h"
 
-NSString *kUpdatePushTokenToServerNotification = @"kUpdatePushTokenToServerNotification";
+NSString *const kUpdatePushTokenToServerNotification = @"kUpdatePushTokenToServerNotification";
+
+NSString *const kIncomingMsg = @"incoming_msg";
+NSString *const kReplay = @"reply_inline";
+NSString *const kMark = @"mark_read"; //see
+
+NSString *const kIncomingCall = @"incoming_call";
+NSString *const kAnswer = @"Answer";
+NSString *const kDecline = @"Decline";
 
 @interface AppDelegate ()
 

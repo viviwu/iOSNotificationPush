@@ -16,7 +16,15 @@
 
 #define kAppDel ((AppDelegate *)[UIApplication sharedApplication].delegate)
 
-extern NSString * kUpdatePushTokenToServerNotification;
+extern NSString *const  kUpdatePushTokenToServerNotification;
+
+extern NSString *const kIncomingMsg;
+extern NSString *const kReplay;
+extern NSString *const kMark;
+
+extern NSString *const kIncomingCall;
+extern NSString *const kAnswer;
+extern NSString *const kDecline;
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, UNUserNotificationCenterDelegate, PKPushRegistryDelegate>
 
