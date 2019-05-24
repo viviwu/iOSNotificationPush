@@ -57,17 +57,26 @@ NSString *const kDecline = @"Decline";
             UIPasteboard   * psb = [UIPasteboard generalPasteboard];
             psb.string = token;
             
-            [[NSNotificationCenter defaultCenter] postNotificationName:kUpdatePushTokenToServerNotification object:token];
+            [[NSNotificationCenter defaultCenter] postNotificationName: kUpdatePushTokenToServerNotification object:token];
         }
         NSLog(@"VoIP Token:\n%@", token);
     }
 }
 
+//iOS8~10:
 - (void)pushRegistry:(PKPushRegistry *)registry didReceiveIncomingPushWithPayload:(PKPushPayload *)payload forType:(NSString *)type
 {
     NSLog(@"PushKit received with payload : %@ \n forType:%@", payload.dictionaryPayload, type);
     //    dispatch_async(dispatch_get_main_queue(), ^{   });
     [AppDelegate presentUserLocalNotification: payload.dictionaryPayload];
+}
+//iOS11+:
+- (void)pushRegistry:(PKPushRegistry *)registry didReceiveIncomingPushWithPayload:(PKPushPayload *)payload forType:(PKPushType)type withCompletionHandler:(void(^)(void))completion
+{
+    [AppDelegate presentUserLocalNotification: payload.dictionaryPayload];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        completion();
+    });
 }
 
 #pragma mark ---- APNs PushNotification Functions
